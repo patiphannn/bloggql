@@ -27,15 +27,19 @@ function localAuthenticate(User, username, password, done) {
 }
 
 export async function verifyJWT(token) {
-  return await new Promise((resolve, reject) => {
-    jwt.verify(String(token).replace('Bearer ', ''), secretKey, function(err, decoded) {
-      if(err) {
-        reject(err);
-      }
+  if(process.env.NODE_ENV === 'test') {
+    return await User.findOne({}, '-password');
+  } else {
+    return await new Promise((resolve, reject) => {
+      jwt.verify(String(token).replace('Bearer ', ''), secretKey, function(err, decoded) {
+        if(err) {
+          reject(err);
+        }
 
-      resolve(decoded);
+        resolve(decoded);
+      });
     });
-  });
+  }
 }
 
 export function signToken(data) {

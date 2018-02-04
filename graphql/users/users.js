@@ -23,7 +23,7 @@ const userQueries = {
     type: new GraphQLList(UserType),
     resolve: async (rootValue, {}, req) => {
       // check token
-      let user = await verifyJWT(req.headers.authorization || '');
+      let user = await verifyJWT((req.headers && req.headers.authorization) || '');
 
       return User.find({});
     },
@@ -99,7 +99,7 @@ const userMutations = {
     },
     resolve: async (rootValue, { input }, req) => {
       // check token
-      let user = await verifyJWT(req.headers.authorization || '');
+      let user = await verifyJWT((req.headers && req.headers.authorization) || '');
 
       if (!isEmail(input.email)) {
         throw new Error('Email is not in valid format');

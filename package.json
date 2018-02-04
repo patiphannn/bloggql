@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon -w ./ --exec 'NODE_ENV=development node bin/'",
-    "start": "NODE_ENV=production node bin/"
+    "start": "NODE_ENV=production node bin/",
+    "test": "NODE_ENV=test jest --coverage --forceExit --runInBand",
+    "test:watch": "NODE_ENV=test jest --watch --coverage"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
@@ -36,6 +38,27 @@
     "eslint": "^4.16.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.8.0",
+    "jest": "^21.2.1",
+    "jest-cli": "^21.2.1",
     "nodemon": "^1.14.11"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "./dist"
+    ],
+    "coverageReporters": [
+      "lcov",
+      "html"
+    ],
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true,
+    "moduleNameMapper": {
+      "^mongoose$": "<rootDir>/node_modules/mongoose"
+    },
+    "setupFiles": [
+      "babel-polyfill"
+    ]
   }
 }

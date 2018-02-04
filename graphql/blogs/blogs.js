@@ -22,7 +22,7 @@ const blogQueries = {
     type: new GraphQLList(BlogType),
     resolve: async (rootValue, {}, req) => {
       // check token
-      await verifyJWT(req.headers.authorization || '');
+      await verifyJWT((req.headers && req.headers.authorization) || '');
 
       return Blog.find({})
         .populate('createdBy', 'id, username')
@@ -38,7 +38,7 @@ const blogQueries = {
     },
     resolve: async (rootValue, { input }, req) => {
       // check token
-      await verifyJWT(req.headers.authorization || '');
+      await verifyJWT((req.headers && req.headers.authorization) || '');
 
       return Blog.findOne({ _id: input.id })
         .populate('createdBy', 'id, username')
@@ -57,13 +57,13 @@ const blogMutations = {
     },
     resolve: async (rootValue, { input }, req) => {
       // check token
-      let user = await verifyJWT(req.headers.authorization || '');
+      let user = await verifyJWT((req.headers && req.headers.authorization) || '');
 
       if (input.name &&
         input.content) {
 
         // createdBy
-        input.createdBy = user._id;
+        input.createdBy = (user && user._id) || undefined;
 
         //use schema.create to insert data into the db
         return Blog.create(input);
@@ -79,10 +79,10 @@ const blogMutations = {
     },
     resolve: async (rootValue, { input }, req) => {
       // check token
-      let user = await verifyJWT(req.headers.authorization || '');
+      let user = await verifyJWT((req.headers && req.headers.authorization) || '');
 
       // updatedBy
-      input.updatedBy = user._id;
+      input.updatedBy = (user && user._id) || undefined;
 
       return Blog.findOneAndUpdate({
           _id: input.id
@@ -101,7 +101,7 @@ const blogMutations = {
     },
     resolve: async (rootValue, { input }, req) => {
       // check token
-      await verifyJWT(req.headers.authorization || '');
+      await verifyJWT((req.headers && req.headers.authorization) || '');
 
       return Blog.remove({
           _id: input.id
