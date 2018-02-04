@@ -1,8 +1,6 @@
-import mongoose from 'mongoose';
 import { graphql } from 'graphql';
 
 import schema from '../schema';
-import { User } from '../../models/blog';
 import { setupTest } from '../../test/helper';
 
 // beforeEach(async () => await setupTest());
