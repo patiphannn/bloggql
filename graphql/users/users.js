@@ -7,7 +7,7 @@ import isEmail from 'validator/lib/isEmail';
 import {
   signToken,
   verifyJWT
-} from '../../services/auth';
+} from '../../auth/auth.service';
 
 import {
   UserType,
@@ -16,7 +16,13 @@ import {
 } from './usersTypes';
 
 import passport from 'passport';
+import _ from 'lodash';
 import User from '../../models/user';
+import config from '../../config/environment';
+
+// Passport Configuration
+import { setup } from '../../auth/local/passport';
+setup(User, config);
 
 const userQueries = {
   users: {
@@ -42,7 +48,7 @@ const userQueries = {
           passport.authenticate('local', (err, user, info) => {
             let error = err || info;
             if(error) {
-              reject(error);
+              reject(error.message);
               return;
             }
             if(!user) {
@@ -99,18 +105,20 @@ const userMutations = {
     },
     resolve: async (rootValue, { input }, req) => {
       // check token
-      let user = await verifyJWT((req.headers && req.headers.authorization) || '');
+      let jwtUser = await verifyJWT((req.headers && req.headers.authorization) || '');
 
       if (!isEmail(input.email)) {
         throw new Error('Email is not in valid format');
       }
 
-      return User.findOneAndUpdate({
-          _id: user._id
-        },
-        input,
-        { new: true }
-      );
+      return User.findOne({ _id: jwtUser._id }).exec()
+        .then(user => {
+          user.email = input.email || user.email;
+          user.username = input.username || user.username;
+          user.password = input.password || user.password;
+
+          return user.save();
+        });
     },
   }
 };

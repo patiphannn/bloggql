@@ -6,7 +6,7 @@ import isEmail from 'validator/lib/isEmail';
 
 import {
   verifyJWT
-} from '../../services/auth';
+} from '../../auth/auth.service';
 
 import {
   BlogType,

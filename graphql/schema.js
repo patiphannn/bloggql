@@ -13,7 +13,6 @@ import {
   blogMutations,
 } from './blogs/blogs';
 
-
 export default new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',

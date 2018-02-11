@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import graphqlHTTP from 'express-graphql';
 import mongoose from 'mongoose';
+import config from './config/environment';
 import passport from 'passport';
 
 import index from './routes/index';
@@ -17,12 +18,7 @@ var app = express();
 const dev = process.env.NODE_ENV === 'development';
 
 // Connect to MongoDB
-mongoose.connect(
-  process.env.MONGODB_URI || 'mongodb://localhost:27017/blog',
-  {
-    promiseLibrary: global.Promise
-  }
-);
+mongoose.connect(config.mongo.uri, config.mongo.options);
 var db = mongoose.connection
 db.on('error', function(err) {
   console.error(`MongoDB connection error: ${err}`);

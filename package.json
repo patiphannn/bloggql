@@ -16,6 +16,7 @@
     "body-parser": "~1.18.2",
     "composable-middleware": "^0.3.0",
     "cookie-parser": "~1.4.3",
+    "crypto": "^1.0.1",
     "debug": "~2.6.9",
     "express": "~4.15.5",
     "express-graphql": "^0.6.11",
@@ -45,7 +46,8 @@
   "jest": {
     "testEnvironment": "node",
     "testPathIgnorePatterns": [
-      "/node_modules/",
+      "./node_modules/",
+      "./environment/",
       "./dist"
     ],
     "coverageReporters": [
