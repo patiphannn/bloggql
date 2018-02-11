@@ -1,0 +1,15 @@
+web:
+  build: .
+  links:
+    - db
+  volumes:
+    - "/var/www/app/blog"
+  ports:
+    - "3001:8080"
+  environment:
+    NODE_ENV: production
+    MONGODB_URI: mongodb://db:27017/blog
+db:
+  image: mongo:latest
+  ports:
+    - "27021:27017"
